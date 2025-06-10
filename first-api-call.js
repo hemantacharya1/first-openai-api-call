@@ -7,13 +7,13 @@ dotenv.config();
 
 const app = express();
 
-const openaiKey = "xxxxxxxxxxxxxxxxxxxxxxxx";
+const openaiKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
-const openai = new OpenAI({apiKey: openaiKey});
+const openai = new OpenAI({apiKey: openaiKey}); // reads from process.env.OPENAI_API_KEY
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.'));
+app.use(express.static('.')); // serves index.html
 
 app.post('/ask', async (req, res) => {
   const userMessage = req.body.message;
@@ -23,9 +23,9 @@ app.post('/ask', async (req, res) => {
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: userMessage }]
     });
-
     const reply = chatResponse.choices[0].message.content;
-    res.json({ reply });
+    const tokenCost = chatResponse.usage.total_tokens;
+    res.json({ reply, tokenCost });
   } catch (err) {
     console.error(err);
     res.status(500).json({ reply: 'Something went wrong.' });

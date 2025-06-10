@@ -7,6 +7,7 @@
     body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
     input, button { padding: 10px; font-size: 16px; margin-top: 10px; width: 100%; }
     #response { margin-top: 20px; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 8px; }
+    #tokenCost { margin-top: 10px; font-size: 14px; color: #666; }
   </style>
 </head>
 <body>
@@ -17,11 +18,13 @@
   <button onclick="askGPT()">Send</button>
 
   <div id="response"></div>
+  <div id="tokenCost"></div>
 
   <script>
     async function askGPT() {
       const input = document.getElementById('userInput').value;
       const responseDiv = document.getElementById('response');
+      const tokenCost = document.getElementById('tokenCost');
       responseDiv.textContent = 'Waiting for response...';
 
       const res = await fetch('/ask', {
@@ -32,6 +35,7 @@
 
       const data = await res.json();
       responseDiv.textContent = data.reply;
+      tokenCost.textContent = `Token used: ${data.tokenCost}`;
     }
   </script>
 
